@@ -31,10 +31,11 @@ def parseOutText(f):
         ### project part 2: comment out the line below
         #words = text_string
         wordList = text_string.split()
-        print wordList
+        #print wordList
         singles = [stemmer.stem(word) for word in wordList]
         for single in singles:
-            print single,
+            words+=' '
+            words+=single
 
         ### split the text string into individual words, stem each word,
         ### and append the stemmed word to words (make sure there's a single
