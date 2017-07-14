@@ -4,6 +4,7 @@ import os
 import pickle
 import re
 import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 sys.path.append( "../tools/" )
 from parse_out_email_text import parseOutText
@@ -42,7 +43,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
         ### only look at first 200 emails when developing
         ### once everything is working, remove this line to run over full dataset
         temp_counter += 1
-        if temp_counter < 200:
+        if temp_counter > 0:
             path = os.path.join('..', path[:-1])
             print path
             email = open(path, "r")
@@ -50,7 +51,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             ### use parseOutText to extract the text from the opened email
             temptext = parseOutText(email)
             #print "temptext1", temptext
-            temptext = temptext.replace('Sara','')
+            temptext = temptext.replace('sara','')
             temptext = temptext.replace('shackleton', '')
             temptext = temptext.replace('chris','')
             temptext = temptext.replace('germani','')
@@ -61,9 +62,9 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
 
             word_data.append(temptext)
             ### append the text to word_data
-            if name == 'Sara':
+            if name == 'sara':
                 from_data.append(0)
-            elif name == 'chris':
+            else:
                 from_data.append(1)
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
 
@@ -73,6 +74,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
 print "emails processed"
 
 print word_data[152]
+print from_data[152]
 
 from_sara.close()
 from_chris.close()
@@ -86,4 +88,8 @@ pickle.dump( from_data, open("your_email_authors.pkl", "w") )
 
 ### in Part 4, do TfIdf vectorization here
 
+vectorizer = TfidfVectorizer(stop_words = 'english')
+TfIdf = vectorizer.fit_transform(word_data)
 
+feature_name_list = vectorizer.get_feature_names()
+print feature_name_list[34597]
