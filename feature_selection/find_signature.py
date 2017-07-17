@@ -51,5 +51,7 @@ counter = 0
 for feat_imp in clf.feature_importances_:
     if feat_imp > 0.2:
         print 'no: ', counter, feat_imp
+        feature_names = vectorizer.get_feature_names()
+        print feature_names[counter]
     counter+=1
 
