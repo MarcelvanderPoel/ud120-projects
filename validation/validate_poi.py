@@ -14,6 +14,9 @@ import pickle
 import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
+from sklearn import tree
+from sklearn.metrics import accuracy_score
+from sklearn import cross_validation
 
 data_dict = pickle.load(open("../final_project/final_project_dataset.pkl", "r") )
 
@@ -26,7 +29,16 @@ data = featureFormat(data_dict, features_list)
 labels, features = targetFeatureSplit(data)
 
 
+### it's all yours from here forward!
 
-### it's all yours from here forward!  
+### split the data in 30% test data and 70% training data
 
+training_features, testing_features, training_labels, testing_labels = cross_validation.train_test_split(features, labels, test_size=0.3, random_state=42)
 
+### fit decision tree, predict and determine accuracy
+
+clf = tree.DecisionTreeClassifier()
+clf.fit(training_features, training_labels)
+pred = clf.predict(testing_features)
+accuracy = accuracy_score(testing_labels, pred)
+print accuracy
