@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import numpy as np
 
 def outlierCleaner(predictions, ages, net_worths):
     """
@@ -12,11 +12,11 @@ def outlierCleaner(predictions, ages, net_worths):
     """
 
     cleaned_data = []
+    errors = (net_worths - predictions) ** 2
+    cleaned_data = zip(ages, net_worths, errors)
 
-    ### your code goes here
+    cleaned_data = sorted(cleaned_data, key=lambda x: x[2], reverse=True)
+    return cleaned_data[9:]
 
-    cleaned_data =
-
-    
     return cleaned_data
 

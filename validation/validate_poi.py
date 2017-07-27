@@ -17,6 +17,8 @@ from feature_format import featureFormat, targetFeatureSplit
 from sklearn import tree
 from sklearn.metrics import accuracy_score
 from sklearn import cross_validation
+import collections
+from sklearn.metrics import classification_report
 
 data_dict = pickle.load(open("../final_project/final_project_dataset.pkl", "r") )
 
@@ -41,4 +43,10 @@ clf = tree.DecisionTreeClassifier()
 clf.fit(training_features, training_labels)
 pred = clf.predict(testing_features)
 accuracy = accuracy_score(testing_labels, pred)
-print accuracy
+print 'accuracy: ', accuracy
+print 'total people in test set: ', len(testing_features)
+print collections.Counter(testing_labels)
+print len(training_features)
+print len(training_labels)
+print zip(pred, testing_labels)
+print classification_report(testing_labels, pred, target_names=['0','1'])
