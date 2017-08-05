@@ -2,6 +2,7 @@
 
 import sys
 import pickle
+import pandas as pd
 sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
@@ -15,6 +16,14 @@ features_list = ['poi','salary'] # You will need to use more features
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
+
+df = pd.DataFrame(data_dict)
+df = df.T
+df = df.applymap(lambda x: pd.np.nan if x=='NaN' else x)
+
+print df.count()
+print df.shape
+print df['poi'].value_counts()
 
 ### Task 2: Remove outliers
 ### Task 3: Create new feature(s)
