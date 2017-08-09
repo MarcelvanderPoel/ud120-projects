@@ -21,9 +21,15 @@ df = pd.DataFrame(data_dict)
 df = df.T
 df = df.applymap(lambda x: pd.np.nan if x=='NaN' else x)
 
-print df.count()
-print df.shape
-print df['poi'].value_counts()
+print 'Shape of dataframe: ', df.shape
+print 'POI values and count: ', df['poi'].value_counts()
+
+dftotals = df.count()
+keys = dftotals.keys()
+print keys
+print dftotals.values
+print dftotals
+
 
 ### Task 2: Remove outliers
 ### Task 3: Create new feature(s)
