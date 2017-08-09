@@ -23,15 +23,21 @@ df = df.applymap(lambda x: pd.np.nan if x=='NaN' else x)
 
 print 'Shape of dataframe: ', df.shape
 print 'POI values and count: ', df['poi'].value_counts()
-
-dftotals = df.count()
-keys = dftotals.keys()
-print keys
-print dftotals.values
-print dftotals
-
+print 'Count of features: ', df.count()
 
 ### Task 2: Remove outliers
+
+pd.set_option('display.height', 1000)
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+
+print df
+
+df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
+
+print df
+
 ### Task 3: Create new feature(s)
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict

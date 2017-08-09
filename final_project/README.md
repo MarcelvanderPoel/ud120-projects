@@ -11,8 +11,10 @@ The goal of the project is to determine who is a POI based on financial and emai
 Machine learning in this case can be useful by classifying persons based on the financial and email data into a POI group and a non-POI group.
 For this purpose, POI were identified based on the fact if they were indicted, reached a settlement or plea deal or testified in exchange for prosecution immunity
 
-The dataset provided contains 146 datapoints and 21 features.
+The dataset provided contains 146 datapoints and 21 features (14 financial, 6 email and 1 POI feature).
 From the 146 datapoints, 18 are marked as POI and 128 are marked as non-POI.
+Not all datapoints have values for every feature:
+
 
 </div>
 <table class="tg">
@@ -107,7 +109,14 @@ From the 146 datapoints, 18 are marked as POI and 128 are marked as non-POI.
 </table>
 </div>
 
+
 ## Features
+
+While exploring the dataset I noticed the following:
+1) Two odd POI, namely 'THE TRAVEL AGENCY IN THE PARK' with only a value for the features other and total, and 'TOTAL' 
+with very high values (outliers) from which i assume it is the total of all data points. Since these don't represent
+persons, I removed them from the dataset. 
+2) LOCKHART EUGENE E is the only person with NaN values for all features. I removed him from the dataset.
 
 ## Picking an algorithm
 
