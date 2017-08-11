@@ -20,9 +20,13 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     if (from_this_person_to_poi == 'nan') or (from_poi_to_this_person == 'nan') or (from_messages == 'NaN') or (to_messages == 'NaN'):
         return 0.
+    print from_this_person_to_poi,  from_messages, from_poi_to_this_person, to_messages
+    from_poi_perc = float(from_this_person_to_poi) / float(from_messages)
+    to_poi_perc = float(from_poi_to_this_person) / float(to_messages)
 
-    fraction = float(from_this_person_to_poi * from_messages) / float(from_poi_to_this_person * to_messages)
-    return fraction
+    index = from_poi_perc * to_poi_perc
+    print index
+    return index
 
 
 ### Task 1: Select what features you'll use.
@@ -49,13 +53,16 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 print df
-
+print data_dict
 ### Task 2: Remove outliers
 
 # df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
 for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_dict.pop(key)
 
 ### Task 3: Create new feature(s)
+
+for person, p_data in data_dict.iteritems():
+    print person, compute_poi_communication_index(p_data['from_this_person_to_poi'], p_data['from_poi_to_this_person'], p_data['from_messages'], p_data['to_messages'])
 
 predictors = ['poi', 'bonus', 'deferral_payments', 'deferred_income', 'director_fees',
               'exercised_stock_options', 'expenses', 'from_messages',
