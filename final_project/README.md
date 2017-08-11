@@ -118,6 +118,64 @@ with very high values (outliers) from which i assume it is the total of all data
 persons, I removed them from the dataset. 
 2) LOCKHART EUGENE E is the only person with NaN values for all features. I removed him from the dataset.
 
+I used SelectKBest to determine the most powerfull features for classifying. I left out the feature email_address since
+it can't be converted to a float.
+
+<table class="tg">
+  <tr>
+    <th class="tg-yw4l">result SelectKBest</th>
+    <th class="tg-yw4l">score</th>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">exercised_stock_options</td>
+    <td class="tg-yw4l">24.82</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">total_stock_value</td>
+    <td class="tg-yw4l">24.18</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">bonus</td>
+    <td class="tg-yw4l">20.79</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">salary</td>
+    <td class="tg-yw4l">18.29</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">deferred_income</td>
+    <td class="tg-yw4l">11.46</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">long_term_incentive</td>
+    <td class="tg-yw4l">9.92</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">restricted_stock</td>
+    <td class="tg-yw4l">9.21</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">total_payments</td>
+    <td class="tg-yw4l">8.77</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">shared_receipt_with_poi</td>
+    <td class="tg-yw4l">8.59</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">loan_advances</td>
+    <td class="tg-yw4l">7.18</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">expenses</td>
+    <td class="tg-yw4l">6.09</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">from_poi_to_this_person</td>
+    <td class="tg-yw4l">5.24</td>
+  </tr>
+</table>
+
 ## Picking an algorithm
 
 ## Tuning an algorithm

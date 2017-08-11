@@ -3,10 +3,13 @@
 import sys
 import pickle
 import pandas as pd
+import operator
 sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
+from sklearn.feature_selection import SelectKBest, f_classif
+from feature_format import featureFormat, targetFeatureSplit
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
@@ -17,6 +20,8 @@ features_list = ['poi','salary'] # You will need to use more features
 with open("final_project_dataset.pkl", "r") as data_file:
     data_dict = pickle.load(data_file)
 
+### transfer data_dict to a dataframe for easy printing and getting info on shape and counts
+
 df = pd.DataFrame(data_dict)
 df = df.T
 df = df.applymap(lambda x: pd.np.nan if x=='NaN' else x)
@@ -25,20 +30,38 @@ print 'Shape of dataframe: ', df.shape
 print 'POI values and count: ', df['poi'].value_counts()
 print 'Count of features: ', df.count()
 
-### Task 2: Remove outliers
-
 pd.set_option('display.height', 1000)
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
-
 print df
 
-df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
+### Task 2: Remove outliers
 
-print df
+# df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
+for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_dict.pop(key)
 
 ### Task 3: Create new feature(s)
+
+predictors = ['poi', 'bonus', 'deferral_payments', 'deferred_income', 'director_fees',
+              'exercised_stock_options', 'expenses', 'from_messages',
+              'from_poi_to_this_person', 'from_this_person_to_poi', 'loan_advances',
+              'long_term_incentive', 'other', 'restricted_stock', 'restricted_stock_deferred',
+              'salary', 'shared_receipt_with_poi', 'to_messages', 'total_payments', 'total_stock_value']
+
+# Perform feature selection
+data = featureFormat(data_dict, predictors)
+target, features = targetFeatureSplit(data)
+selector = SelectKBest(score_func=f_classif, k=10)
+selector.fit(features, target)
+
+predictors.pop(0)
+feature_scores = zip (predictors, selector.scores_)
+feature_scores.sort(key = operator.itemgetter(1), reverse = True)
+print feature_scores
+
+
+
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
 
