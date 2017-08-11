@@ -120,6 +120,11 @@ persons, I removed them from the dataset.
 
 I used SelectKBest to determine the most powerfull features for classifying. I left out the feature email_address since
 it can't be converted to a float.
+I made the assumption that POI share fraud related information more between themselves then with non-POI and that this
+could show through the relative portion of mail they send and receive from other POI. I created four additional
+features, from which from_poi_perc as a high score. I dropped from_to_add, since it is an addition of two fields of
+which one is from_poi_perc. 
+
 
 <table class="tg">
   <tr>
@@ -127,54 +132,51 @@ it can't be converted to a float.
     <th class="tg-yw4l">score</th>
   </tr>
   <tr>
-    <td class="tg-yw4l">exercised_stock_options</td>
-    <td class="tg-yw4l">24.82</td>
+    <td>exercised_stock_options</td>
+    <td>24.81</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">total_stock_value</td>
-    <td class="tg-yw4l">24.18</td>
+    <td>total_stock_value</td>
+    <td>24.18</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">bonus</td>
-    <td class="tg-yw4l">20.79</td>
+    <td>bonus</td>
+    <td>20.79</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">salary</td>
-    <td class="tg-yw4l">18.29</td>
+    <td>salary</td>
+    <td>18.29</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">deferred_income</td>
-    <td class="tg-yw4l">11.46</td>
+    <td>from_poi_perc</td>
+    <td>16.41</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">long_term_incentive</td>
-    <td class="tg-yw4l">9.92</td>
+    <td>from_to_add</td>
+    <td>15.78</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">restricted_stock</td>
-    <td class="tg-yw4l">9.21</td>
+    <td>deferred_income</td>
+    <td>11.46</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">total_payments</td>
-    <td class="tg-yw4l">8.77</td>
+    <td>long_term_incentive</td>
+    <td>9.92</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">shared_receipt_with_poi</td>
-    <td class="tg-yw4l">8.59</td>
+    <td>restricted_stock</td>
+    <td>9.21</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">loan_advances</td>
-    <td class="tg-yw4l">7.18</td>
+    <td>total_payments</td>
+    <td>8.77</td>
   </tr>
   <tr>
-    <td class="tg-yw4l">expenses</td>
-    <td class="tg-yw4l">6.09</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">from_poi_to_this_person</td>
-    <td class="tg-yw4l">5.24</td>
+    <td>shared_receipt_with_poi</td>
+    <td>8.59</td>
   </tr>
 </table>
+
 
 ## Picking an algorithm
 

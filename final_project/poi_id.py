@@ -18,15 +18,20 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
         received by a person.
    """
 
-    if (from_this_person_to_poi == 'nan') or (from_poi_to_this_person == 'nan') or (from_messages == 'NaN') or (to_messages == 'NaN'):
-        return 0.
-    print from_this_person_to_poi,  from_messages, from_poi_to_this_person, to_messages
-    from_poi_perc = float(from_this_person_to_poi) / float(from_messages)
-    to_poi_perc = float(from_poi_to_this_person) / float(to_messages)
+    if (from_this_person_to_poi == 'NaN') or (from_poi_to_this_person == 'NaN'):
+        from_poi_perc = 0.
+    else:
+        from_poi_perc = float(from_this_person_to_poi) / float(from_messages)
 
-    index = from_poi_perc * to_poi_perc
-    print index
-    return index
+    if (from_messages == 'NaN') or (to_messages == 'NaN'):
+        to_poi_perc = 0.
+    else:
+        to_poi_perc = float(from_poi_to_this_person) / float(to_messages)
+
+    index1 = from_poi_perc + to_poi_perc
+    index2 = from_poi_perc * to_poi_perc
+    print index1, index2
+    return from_poi_perc, to_poi_perc, index1, index2
 
 
 ### Task 1: Select what features you'll use.
@@ -62,13 +67,18 @@ for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_
 ### Task 3: Create new feature(s)
 
 for person, p_data in data_dict.iteritems():
-    print person, compute_poi_communication_index(p_data['from_this_person_to_poi'], p_data['from_poi_to_this_person'], p_data['from_messages'], p_data['to_messages'])
+    f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(p_data['from_this_person_to_poi'], p_data['from_poi_to_this_person'], p_data['from_messages'], p_data['to_messages'])
+    p_data['from_poi_perc'] = f_poi_p
+    p_data['to_poi_perc'] = t_poi_p
+    p_data['from_to_add'] = f_t_add
+    p_data['from_to_mult'] = f_t_mult
 
 predictors = ['poi', 'bonus', 'deferral_payments', 'deferred_income', 'director_fees',
               'exercised_stock_options', 'expenses', 'from_messages',
               'from_poi_to_this_person', 'from_this_person_to_poi', 'loan_advances',
               'long_term_incentive', 'other', 'restricted_stock', 'restricted_stock_deferred',
-              'salary', 'shared_receipt_with_poi', 'to_messages', 'total_payments', 'total_stock_value']
+              'salary', 'shared_receipt_with_poi', 'to_messages', 'total_payments', 'total_stock_value',
+              'from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
 
 # Perform feature selection
 data = featureFormat(data_dict, predictors)
