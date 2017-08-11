@@ -11,6 +11,20 @@ from tester import dump_classifier_and_data
 from sklearn.feature_selection import SelectKBest, f_classif
 from feature_format import featureFormat, targetFeatureSplit
 
+def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_person, from_messages, to_messages):
+
+    """ returns a number between 0 and 1 that represents the amount of communication between a person and a poi
+        by multiplying the percentage of mail send to and received from a poi compared to the total mail send and
+        received by a person.
+   """
+
+    if (from_this_person_to_poi == 'nan') or (from_poi_to_this_person == 'nan') or (from_messages == 'NaN') or (to_messages == 'NaN'):
+        return 0.
+
+    fraction = float(from_this_person_to_poi * from_messages) / float(from_poi_to_this_person * to_messages)
+    return fraction
+
+
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
