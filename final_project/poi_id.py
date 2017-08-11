@@ -30,7 +30,6 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     index1 = from_poi_perc + to_poi_perc
     index2 = from_poi_perc * to_poi_perc
-    print index1, index2
     return from_poi_perc, to_poi_perc, index1, index2
 
 
@@ -58,7 +57,7 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 print df
-print data_dict
+
 ### Task 2: Remove outliers
 
 # df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
@@ -89,7 +88,9 @@ selector.fit(features, target)
 predictors.pop(0)
 feature_scores = zip (predictors, selector.scores_)
 feature_scores.sort(key = operator.itemgetter(1), reverse = True)
-print feature_scores
+print "Feature scores"
+for feature_score in feature_scores:
+    print feature_score
 
 
 
