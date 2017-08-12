@@ -103,7 +103,7 @@ predictors = features_list + ['from_poi_perc', 'to_poi_perc', 'from_to_add', 'fr
 predictors.pop(0)
 feature_scores = zip (predictors, selector.scores_)
 feature_scores.sort(key = operator.itemgetter(1), reverse = True)
-print "Feature scores"
+print "Feature scores "
 for feature_score in feature_scores:
     print feature_score
 
