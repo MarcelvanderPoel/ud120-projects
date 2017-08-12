@@ -3,12 +3,14 @@
 import sys
 import pickle
 import pandas as pd
+import numpy as np
 import operator
 sys.path.append("../tools/")
 
 from feature_format import featureFormat, targetFeatureSplit
 from tester import dump_classifier_and_data
 from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.preprocessing import MinMaxScaler
 from feature_format import featureFormat, targetFeatureSplit
 
 def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_person, from_messages, to_messages):
@@ -18,17 +20,17 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
         received by a person.
    """
 
-    if (from_this_person_to_poi == 'NaN') or (from_poi_to_this_person == 'NaN'):
+    if (from_this_person_to_poi == 0) or (from_poi_to_this_person == 0):
         from_poi_perc = 0.
     else:
         from_poi_perc = float(from_this_person_to_poi) / float(from_messages)
 
-    if (from_messages == 'NaN') or (to_messages == 'NaN'):
+    if (from_messages == 0) or (to_messages == 0):
         to_poi_perc = 0.
     else:
         to_poi_perc = float(from_poi_to_this_person) / float(to_messages)
 
-    index1 = from_poi_perc + to_poi_perc
+    index1 = (from_poi_perc + to_poi_perc) / 2
     index2 = from_poi_perc * to_poi_perc
     return from_poi_perc, to_poi_perc, index1, index2
 
@@ -36,7 +38,11 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','salary'] # You will need to use more features
+features_list = ['poi', 'bonus', 'deferral_payments', 'deferred_income', 'director_fees',
+              'exercised_stock_options', 'expenses', 'from_messages',
+              'from_poi_to_this_person', 'from_this_person_to_poi', 'loan_advances',
+              'long_term_incentive', 'other', 'restricted_stock', 'restricted_stock_deferred',
+              'salary', 'shared_receipt_with_poi', 'to_messages', 'total_payments', 'total_stock_value']
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
@@ -65,26 +71,35 @@ for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_
 
 ### Task 3: Create new feature(s)
 
-for person, p_data in data_dict.iteritems():
-    f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(p_data['from_this_person_to_poi'], p_data['from_poi_to_this_person'], p_data['from_messages'], p_data['to_messages'])
-    p_data['from_poi_perc'] = f_poi_p
-    p_data['to_poi_perc'] = t_poi_p
-    p_data['from_to_add'] = f_t_add
-    p_data['from_to_mult'] = f_t_mult
-
-predictors = ['poi', 'bonus', 'deferral_payments', 'deferred_income', 'director_fees',
-              'exercised_stock_options', 'expenses', 'from_messages',
-              'from_poi_to_this_person', 'from_this_person_to_poi', 'loan_advances',
-              'long_term_incentive', 'other', 'restricted_stock', 'restricted_stock_deferred',
-              'salary', 'shared_receipt_with_poi', 'to_messages', 'total_payments', 'total_stock_value',
-              'from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
-
 # Perform feature selection
-data = featureFormat(data_dict, predictors)
-target, features = targetFeatureSplit(data)
-selector = SelectKBest(score_func=f_classif, k=10)
-selector.fit(features, target)
+data = featureFormat(data_dict, features_list)
+poi, features = targetFeatureSplit(data)
 
+# Rescale features
+scaler = MinMaxScaler()
+rescaled_features = scaler.fit_transform(features)
+
+# Create additional features
+
+added_features = []
+
+for rf in rescaled_features:
+
+    f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(rf[9], rf[8], rf[7], rf[17])
+    added_feature = [f_poi_p, t_poi_p, f_t_add, f_t_mult]
+    added_features.append(np.array(added_feature))
+
+add_features = np.array(added_features)
+
+resc_add_feat = np.concatenate((rescaled_features,add_features),axis=1)
+
+# Select 10 best features
+selector = SelectKBest(score_func=f_classif, k=10)
+selector.fit(resc_add_feat, poi)
+
+predictors = features_list + ['from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
+
+#remove 'poi' from the predictor list and print sorted feature_scores
 predictors.pop(0)
 feature_scores = zip (predictors, selector.scores_)
 feature_scores.sort(key = operator.itemgetter(1), reverse = True)
