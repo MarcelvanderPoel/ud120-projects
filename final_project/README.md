@@ -118,12 +118,10 @@ with very high values (outliers) from which i assume it is the total of all data
 persons, I removed them from the dataset. 
 2) LOCKHART EUGENE E is the only person with NaN values for all features. I removed him from the dataset.
 
-I used SelectKBest to determine the most powerfull features for classifying. I left out the feature email_address since
-it can't be converted to a float.
+I used SelectKBest to determine the most powerful features for classifying after rescaling them with the MinMax rescaler.
 I made the assumption that POI share fraud related information more between themselves then with non-POI and that this
-could show through the relative portion of mail they send and receive from other POI. I created four additional
-features, from which from_poi_perc as a high score. I dropped from_to_add, since it is an addition of two fields of
-which one is from_poi_perc. 
+could show through the relative portion of mail they send and receive from other POI. For this I created four additional
+features, from which from_poi_perc had the hightest score. 
 
 
 <table class="tg">
@@ -133,7 +131,7 @@ which one is from_poi_perc.
   </tr>
   <tr>
     <td>exercised_stock_options</td>
-    <td>24.81</td>
+    <td>24.82</td>
   </tr>
   <tr>
     <td>total_stock_value</td>
@@ -147,15 +145,7 @@ which one is from_poi_perc.
     <td>salary</td>
     <td>18.29</td>
   </tr>
-  <tr>
-    <td>from_poi_perc</td>
-    <td>16.41</td>
-  </tr>
-  <tr>
-    <td>from_to_add</td>
-    <td>15.78</td>
-  </tr>
-  <tr>
+   <tr>
     <td>deferred_income</td>
     <td>11.46</td>
   </tr>
@@ -174,6 +164,10 @@ which one is from_poi_perc.
   <tr>
     <td>shared_receipt_with_poi</td>
     <td>8.59</td>
+  </tr>
+ <tr>
+    <td>from_poi_perc</td>
+    <td>7.22</td>
   </tr>
 </table>
 

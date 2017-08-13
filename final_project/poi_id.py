@@ -80,11 +80,9 @@ scaler = MinMaxScaler()
 rescaled_features = scaler.fit_transform(features)
 
 # Create additional features
-
 added_features = []
 
 for rf in rescaled_features:
-
     f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(rf[9], rf[8], rf[7], rf[17])
     added_feature = [f_poi_p, t_poi_p, f_t_add, f_t_mult]
     added_features.append(np.array(added_feature))
@@ -106,8 +104,6 @@ feature_scores.sort(key = operator.itemgetter(1), reverse = True)
 print "Feature scores "
 for feature_score in feature_scores:
     print feature_score
-
-
 
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
