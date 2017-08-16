@@ -174,6 +174,11 @@ features, from which from_poi_perc had the hightest score.
 
 ## Picking an algorithm
 
+I looked at the following classification algorithms:
+Gaussian Naive Bayes
+Decision Tree
+SVM 
+
 ## Tuning an algorithm
 
 ## Validation
