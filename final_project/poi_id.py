@@ -30,9 +30,10 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
     else:
         to_poi_perc = float(from_poi_to_this_person) / float(to_messages)
 
-    index1 = (from_poi_perc + to_poi_perc) / 2
-    index2 = from_poi_perc * to_poi_perc
-    return from_poi_perc, to_poi_perc, index1, index2
+    from_to_add = from_poi_perc + to_poi_perc
+    from_to_mlt = from_poi_perc * to_poi_perc
+
+    return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
 
 ### Task 1: Select what features you'll use.
@@ -54,19 +55,12 @@ df = pd.DataFrame(data_dict)
 df = df.T
 df = df.applymap(lambda x: pd.np.nan if x=='NaN' else x)
 
-print 'Shape of dataframe: ', df.shape
-print 'POI values and count: ', df['poi'].value_counts()
-print 'Count of features: ', df.count()
-
-pd.set_option('display.height', 1000)
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
-print df
+print 'Shape of dataframe           : ', df.shape
+print 'POI values and count         : ', df['poi'].value_counts()
+print 'Non-Nan values per feature   : ', df.count()
 
 ### Task 2: Remove outliers
 
-# df=df[(df.index != 'THE TRAVEL AGENCY IN THE PARK') & (df.index != 'TOTAL') & (df.index != 'LOCKHART EUGENE E')]
 for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_dict.pop(key)
 
 ### Task 3: Create new feature(s)
@@ -75,30 +69,43 @@ for key in ('THE TRAVEL AGENCY IN THE PARK','TOTAL', 'LOCKHART EUGENE E'): data_
 data = featureFormat(data_dict, features_list)
 poi, features = targetFeatureSplit(data)
 
+# Create additional features for each data point and add them to data_dict and features
+added_features = []
+
+keys = data_dict.keys()
+ft_count = 0
+for key in keys:
+
+    ft = features[ft_count]
+
+    f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(ft[9], ft[8], ft[7], ft[17])
+
+    added_feature = [f_poi_p, t_poi_p, f_t_add, f_t_mult]
+    added_features.append(np.array(added_feature))
+    data_dict[key]['from_poi_perc'] = f_poi_p
+    data_dict[key]['to_poi_perc'] = t_poi_p
+    data_dict[key]['from_to_add'] = f_t_add
+    data_dict[key]['from_to_mult'] = f_t_mult
+
+    ft_count+=1
+
+add_features = np.array(added_features)
+
+features = np.concatenate((features,add_features),axis=1)
+
 # Rescale features
 scaler = MinMaxScaler()
 rescaled_features = scaler.fit_transform(features)
 
-# Create additional features
-added_features = []
-
-for rf in rescaled_features:
-    f_poi_p, t_poi_p, f_t_add, f_t_mult = compute_poi_communication_index(rf[9], rf[8], rf[7], rf[17])
-    added_feature = [f_poi_p, t_poi_p, f_t_add, f_t_mult]
-    added_features.append(np.array(added_feature))
-
-add_features = np.array(added_features)
-
-resc_add_feat = np.concatenate((rescaled_features,add_features),axis=1)
-
 # Select 10 best features
 selector = SelectKBest(score_func=f_classif, k=10)
-selector.fit(resc_add_feat, poi)
-
-predictors = features_list + ['from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
+selector.fit(features, poi)
+is_best_features = selector.get_support()
 
 #remove 'poi' from the predictor list and print sorted feature_scores
+predictors = features_list + ['from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
 predictors.pop(0)
+
 feature_scores = zip (predictors, selector.scores_)
 feature_scores.sort(key = operator.itemgetter(1), reverse = True)
 print "Feature scores "
@@ -108,9 +115,30 @@ for feature_score in feature_scores:
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
 
+keys = data_dict.keys()
+for key in keys:
+
+    my_dataset[key].pop('email_address')
+    for counter in range(23):
+
+        if is_best_features[counter] == False:
+            my_dataset[key].pop(predictors[counter])
+
+
 ### Extract features and labels from dataset for local testing
+
+features_list = ['poi']
+for counter in range(23):
+    if is_best_features[counter] == True:
+        features_list.append(predictors[counter])
+
 data = featureFormat(my_dataset, features_list, sort_keys = True)
 labels, features = targetFeatureSplit(data)
+
+# Rescale features after reloading best features
+scaler = MinMaxScaler()
+features = scaler.fit_transform(features)
+
 
 ### Task 4: Try a varity of classifiers
 ### Please name your classifier clf for easy export below.
