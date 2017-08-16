@@ -38,6 +38,19 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
+def clf_fit_and_evaluate(clf, features, labels):
+    ### split the data in 30% test data and 70% training data
+    training_features, testing_features, training_labels, testing_labels = \
+        cross_validation.train_test_split(features, labels, test_size=0.3, random_state=42)
+
+    ### fit classifier, predict and determine accuracy, precision and recall
+    clf.fit(training_features, training_labels)
+    pred = clf.predict(testing_features)
+    accuracy = accuracy_score(testing_labels, pred)
+    precision = precision_score(testing_labels, pred)
+    recall = recall_score(testing_labels, pred)
+
+    return accuracy, precision, recall
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
@@ -155,26 +168,25 @@ features = scaler.fit_transform(features)
 from sklearn.naive_bayes import GaussianNB
 clf_gnb = GaussianNB()
 
+accuracy, precision, recall = clf_fit_and_evaluate(clf_gnb, features, labels)
+
+print ''
+print 'Gaussian Naive Bayes'
+print 'accuracy decision tree: ', accuracy
+print 'precision decision tree: ', precision
+print 'recall decision tree: ', recall
+
 # Decision Tree Classifier
 from sklearn import tree
 clf_dt = tree.DecisionTreeClassifier()
 
-### split the data in 30% test data and 70% training data
-training_features, testing_features, training_labels, testing_labels = cross_validation.train_test_split(features, labels, test_size=0.3, random_state=42)
-
-### fit decision tree, predict and determine accuracy
-from sklearn import tree
-clf_dt = tree.DecisionTreeClassifier()
-clf_dt.fit(training_features, training_labels)
-pred = clf_dt.predict(testing_features)
-accuracy = accuracy_score(testing_labels, pred)
-precision = precision_score(testing_labels, pred)
-recall = recall_score(testing_labels, pred)
-
+accuracy, precision, recall = clf_fit_and_evaluate(clf_dt, features, labels)
+print ' '
+print 'Decision Tree Classifier'
 print 'accuracy decision tree: ', accuracy
 print 'precision decision tree: ', precision
 print 'recall decision tree: ', recall
-print classification_report(testing_labels, pred, target_names=['0','1'])
+# print classification_report(testing_labels, pred, target_names=['0','1'])
 
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
@@ -193,5 +205,9 @@ features_train, features_test, labels_train, labels_test = \
 ### check your results. You do not need to change anything below, but make sure
 ### that the version of poi_id.py that you submit can be run on its own and
 ### generates the necessary .pkl files for validating your results.
+
+# Gaussian Naive Bayes, replace later with final clf, this is to prevent error message
+from sklearn.naive_bayes import GaussianNB
+clf = GaussianNB()
 
 dump_classifier_and_data(clf, my_dataset, features_list)
