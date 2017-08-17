@@ -175,9 +175,12 @@ features, from which from_poi_perc had the hightest score.
 ## Picking an algorithm
 
 I looked at the following classification algorithms:
-Gaussian Naive Bayes
-Decision Tree
-SVM 
+1) Gaussian Naive Bayes
+2) Decision Tree
+3) SVM
+
+What do I find more important when judging the algorithm, precision, recall or F1?
+Would I rather not overlook any poi, or would I rather prevent selecting/accusing the wrong poi and why? 
 
 ## Tuning an algorithm
 
