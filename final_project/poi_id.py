@@ -13,7 +13,7 @@ from sklearn.preprocessing import MinMaxScaler
 from feature_format import featureFormat, targetFeatureSplit
 from sklearn import cross_validation
 from sklearn.decomposition import PCA
-from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import precision_score, recall_score, f1_score
 
 
 def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_person, from_messages, to_messages):
@@ -38,13 +38,12 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
-def clf_fit_and_evaluate(clf, features, labels, pca_on, print_it):
+def clf_fit_and_evaluate(clf, features, labels, pca_on, print_it, iters):
 
     ### run the evaluation 200 times and take the average scores, because every unique evaluation gives an unique score
 
     prec_poi, prec_non_poi, rec_poi, rec_non_poi, f1_poi, f1_non_poi = 0, 0, 0, 0, 0, 0
-    
-    iters = 5000
+
     divider = iters
     
     for iter in range (iters):
@@ -221,7 +220,7 @@ for i in range (2):
 
     print ''
     print 'Gaussian Naive Bayes', pca_text
-    clf_fit_and_evaluate(clf_gnb, features, labels, pca_on, True)
+    clf_fit_and_evaluate(clf_gnb, features, labels, pca_on, True, 5000)
 
     # classifier 2: Decision Tree Classifier
     from sklearn import tree
@@ -229,7 +228,7 @@ for i in range (2):
 
     print ' '
     print 'Decision Tree Classifier', pca_text
-    clf_fit_and_evaluate(clf_dt, features, labels, pca_on, True)
+    clf_fit_and_evaluate(clf_dt, features, labels, pca_on, True, 5000)
 
     # classifier 3: Support Vector Machines
     from sklearn import svm
@@ -237,7 +236,7 @@ for i in range (2):
 
     print ' '
     print 'Support Vector Machines', pca_text
-    clf_fit_and_evaluate(clf_svm, features, labels, pca_on, True)
+    clf_fit_and_evaluate(clf_svm, features, labels, pca_on, True, 5000)
 
     # classifier 4: Logistic Regression
     from sklearn.linear_model import LogisticRegression
@@ -245,31 +244,39 @@ for i in range (2):
 
     print ''
     print 'Logistic Regression', pca_text
-    clf_fit_and_evaluate(clf_lr, features, labels, pca_on, True)
+    clf_fit_and_evaluate(clf_lr, features, labels, pca_on, True, 5000)
 
-    # classifier 5: k-nearest Neighbours
+    # classifier 5: KMeans
     from sklearn import cluster
-    clf_knn = cluster.KMeans(n_clusters=2)
+    clf_km = cluster.KMeans(n_clusters=2)
 
     print ' '
-    print 'k-nearest Neigbours', pca_text
-    clf_fit_and_evaluate(clf_knn, features, labels, pca_on, True)
+    print 'KMeans', pca_text
+    clf_fit_and_evaluate(clf_km, features, labels, pca_on, True, 5000)
 
-# Choose Gaussian Naive Bayes, with PCA as classifier to tune
-clf = GaussianNB()
-
-
-### Task 5: Tune your classifier to achieve better than .3 precision and recall 
+### Task 5: Tune your classifier to achieve better than .3 precision and recall
 ### using our testing script. Check the tester.py script in the final project
 ### folder for details on the evaluation method, especially the test_classifier
 ### function. Because of the small size of the dataset, the script uses
 ### stratified shuffle split cross validation. For more info: 
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 
-# Example starting point. Try investigating other evaluation techniques!
-from sklearn.cross_validation import train_test_split
-features_train, features_test, labels_train, labels_test = \
-    train_test_split(features, labels, test_size=0.3, random_state=42)
+# Choose KMeans without PCA as classifier to tune
+
+from sklearn.grid_search import GridSearchCV
+parameters = {'n_clusters': [1,2] , 'algorithm':('auto', 'full', 'elkan')
+                , 'init':('k-means++', 'random'), 'n_init': [1,2,5,10,20]}
+from sklearn import cluster
+km = cluster.KMeans()
+clf = GridSearchCV(km, parameters)
+clf.fit(features, labels)
+print 'best params: ', clf.best_params_
+print 'best estimator: ', clf.best_estimator_
+
+print ' '
+print 'Tuned k-nearest Neigbours'
+clf_fit_and_evaluate(clf, features, labels, False, True, 200)
+
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure

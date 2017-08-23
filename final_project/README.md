@@ -307,7 +307,7 @@ With 5 principal components I get 92% of the variation in the data.
     <td></td>
   </tr>
   <tr>
-    <th>k-nearest Neigbours  with PCA</th>
+    <th>KMeans  with PCA</th>
     <th></th>
   </tr>
   <tr>
@@ -466,7 +466,7 @@ With 5 principal components I get 92% of the variation in the data.
     <td></td>
   </tr>
   <tr>
-    <th>k-nearest Neigbours  without PCA</th>
+    <th>KMeans  without PCA</th>
     <th></th>
   </tr>
   <tr>
@@ -499,14 +499,25 @@ In choosing the best algorithm, I found it important that the recall on POI is h
 that POI are not easily missed. After that I found a precision on non-poi more important,
 than the precision on poi; I rather select to many POI than missing one.
 
-KNN and GNB with and without PCA score almost the same highest score on recall POI, KNN
-being slightly better. But GNB has a much better score on precision non-POI. For this reason
-I decided to tune GNB. And to tune it with PCA, which scores better then without PCA.
+KMeans and GNB with and without PCA score almost the same highest score on recall POI, KMeans
+being slightly better. But GNB has a much better score on precision non-POI. Therefore, I prefered GNB. 
+But since there is nothing to tune with GNB, I took KMeans without PCA to tune.
 
 ## Tuning an algorithm
 
-Use GridSearchCV, look at clf.best_estimator_ and clf.best_params_
+I used GridSearchCV with the following parameters to tune KMeans: 
+{'n_clusters': [1,2,3,4,5,6,7,8,9] , 'algorithm':('auto', 'full', 'elkan')
+                , 'init':('k-means++', 'random'), 'n_init': [1,2,5,10,20]}.
+                
+The best estimator was KMeans(algorithm='full', copy_x=True, init='random', max_iter=300,
+    n_clusters=9, n_init=2, n_jobs=1, precompute_distances='auto', random_state=None, tol=0.0001, verbose=0).
+     
+I noticed GridSearchCV uses a different scoring and doesn't follow my high recall on poi/high precision on non-poi
+scoring. I lowered the n_clusters step by step to find an optimum and found that at 
+    
 
+  
+                
 ## Validation
 
 sklearn cross validation to split tst/train. Use k-fold cross validation.
@@ -518,3 +529,8 @@ sklearn cross validation to split tst/train. Use k-fold cross validation.
 
 With and without Principal component analysis for all classifiers. part about training/testing.
 Lesson 14/4
+
+References:
+Sklearn Documentation on http://scikit-learn.org
+Udacity Course documentation
+Stackoverflow website
