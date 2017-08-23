@@ -174,54 +174,334 @@ features, from which from_poi_perc had the hightest score.
 
 ## Picking an algorithm
 
-I looked at the following classification algorithms:
-1) Gaussian Naive Bayes
-2) Decision Tree
-3) SVM
-4) Logistic Regression
-5) k-nearest neigbours
+I looked at the following classification algorithms, with and without PCA. Principal component analysis is used on all these algorithms to reduce the dimensionality of the input features.
+With 5 principal components I get 92% of the variation in the data.
 
-Gaussian Naive Bayes
-precision poi      :  0.34
-precision non-poi  :  0.9
-recall poi         :  0.33
-recall non-poi     :  0.88
-f1 poi             :  0.3
-f1 non-poi         :  0.89
- 
-Decision Tree Classifier
-precision poi      :  0.26
-precision non-poi  :  0.89
-recall poi         :  0.28
-recall non-poi     :  0.88
-f1 poi             :  0.25
-f1 non-poi         :  0.89
- 
-Support Vector Machines
-precision poi      :  0.0
-precision non-poi  :  0.87
-recall poi         :  0.0
-recall non-poi     :  1.0
-f1 poi             :  0.0
-f1 non-poi         :  0.93
+<table>
+  <tr>
+    <th>Gaussian Naive Bayes  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.41</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.9</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.33</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.92</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.34</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.91</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Decision Tree Classifier  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.22</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.89</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.23</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.21</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Support Vector Machines  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.87</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>1.0</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.93</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Logistic Regression  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.3</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.07</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.99</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.11</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.93</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>k-nearest Neigbours  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.3</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.78</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.34</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.73</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.21</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.72</td>
+  </tr>
+</table>
 
-Logistic Regression
-precision poi      :  0.29
-precision non-poi  :  0.88
-recall poi         :  0.08
-recall non-poi     :  0.99
-f1 poi             :  0.12
-f1 non-poi         :  0.93
- 
-k-nearest Neigbours
-precision poi      :  0.3
-precision non-poi  :  0.77
-recall poi         :  0.36
-recall non-poi     :  0.69
-f1 poi             :  0.21
-f1 non-poi         :  0.68
+<table>
+  <tr>
+    <th>Gaussian Naive Bayes  without PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.35</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.9</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.33</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.3</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.89</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Decision Tree Classifier  without PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.26</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.89</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.27</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.24</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.89</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Support Vector Machines  without PCA</th>
+    <td></td>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.87</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>1.0</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.93</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>Logistic Regression  without PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.3</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.88</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.08</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.99</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.12</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.93</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <th>k-nearest Neigbours  without PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.32</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.78</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.36</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.71</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.22</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.7</td>
+  </tr>
+</table>
 
- Moet ik nog iets doen met Principal Component Analysis?
+In choosing the best algorithm, I found it important that the recall on POI is high, making sure
+that POI are not easily missed. After that I found a precision on non-poi more important,
+than the precision on poi; I rather select to many POI than missing one.
+
+KNN and GNB with and without PCA score almost the same highest score on recall POI, KNN
+being slightly better. But GNB has a much better score on precision non-POI. For this reason
+I decided to tune GNB. And to tune it with PCA, which scores better then without PCA.
 
 ## Tuning an algorithm
 
@@ -233,12 +513,7 @@ sklearn cross validation to split tst/train. Use k-fold cross validation.
 
 ## Evaluation Metrics
 
-What do I find more important when judging the algorithm, precision, recall or F1 (=harmonic mean of precision and recall)
-Would I rather not overlook any poi, or would I rather prevent selecting/accusing the wrong poi and why?
-high recall is prefered ove a high precision, because I would prefer not to miss a poi and accept that maybe too many people are flagged as poi.
-these will be filtered out after further investigation.
 
-Show recall, precision, F1, accuracy?
 
 
 With and without Principal component analysis for all classifiers. part about training/testing.

@@ -12,7 +12,7 @@ from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.preprocessing import MinMaxScaler
 from feature_format import featureFormat, targetFeatureSplit
 from sklearn import cross_validation
-import collections
+from sklearn.decomposition import PCA
 from sklearn.metrics import classification_report, accuracy_score, precision_score, recall_score, f1_score
 
 
@@ -38,7 +38,7 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
-def clf_fit_and_evaluate(clf, features, labels, print_it=True):
+def clf_fit_and_evaluate(clf, features, labels, pca_on, print_it):
 
     ### run the evaluation 200 times and take the average scores, because every unique evaluation gives an unique score
 
@@ -52,10 +52,19 @@ def clf_fit_and_evaluate(clf, features, labels, print_it=True):
         training_features, testing_features, training_labels, testing_labels = \
             cross_validation.train_test_split(features, labels, test_size=0.33)
 
+        ### if principal component analysis is used, train and test data must be converted before fitting
+
+        if pca_on:
+            pca = PCA(n_components = 5)
+            pca.fit(training_features)
+            training_features = pca.transform(training_features)
+            testing_features = pca.transform(testing_features)
+
         ### fit classifier, predict and determine precision, recall and f1
         clf.fit(training_features, training_labels)
         pred = clf.predict(testing_features)
         precision = precision_score(testing_labels, pred, average=None)
+        # when scoring fails, ignore it
         try:
             prec_poi+=precision[1]
             prec_non_poi+=precision[0]       
@@ -66,7 +75,6 @@ def clf_fit_and_evaluate(clf, features, labels, print_it=True):
             f1_poi += f1[1]
             f1_non_poi += f1[0]
         except:
-            print 'Out of Bounds'
             iter-=1
 
 
@@ -195,47 +203,56 @@ features = scaler.fit_transform(features)
 ### you'll need to use Pipelines. For more info:
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
-# Create a 5 classifiers
+# Create 5 classifiers with and without pca
 
-# classifier 1: Gaussian Naive Bayes
-from sklearn.naive_bayes import GaussianNB
-clf_gnb = GaussianNB()
+for i in range (2):
 
-print ''
-print 'Gaussian Naive Bayes'
-clf_fit_and_evaluate(clf_gnb, features, labels)
+    if i == 1:
+        pca_on = False
+        pca_text = ' without PCA'
+    else:
+        pca_on = True
+        pca_text = ' with PCA'
 
-# classifier 2: Decision Tree Classifier
-from sklearn import tree
-clf_dt = tree.DecisionTreeClassifier()
+    # classifier 1: Gaussian Naive Bayes
+    from sklearn.naive_bayes import GaussianNB
+    clf_gnb = GaussianNB()
 
-print ' '
-print 'Decision Tree Classifier'
-clf_fit_and_evaluate(clf_dt, features, labels)
+    print ''
+    print 'Gaussian Naive Bayes', pca_text
+    clf_fit_and_evaluate(clf_gnb, features, labels, pca_on, True)
 
-# classifier 3: Support Vector Machines
-from sklearn import svm
-clf_svm = svm.SVC(kernel="rbf")
+    # classifier 2: Decision Tree Classifier
+    from sklearn import tree
+    clf_dt = tree.DecisionTreeClassifier()
 
-print ' '
-print 'Support Vector Machines'
-clf_fit_and_evaluate(clf_svm, features, labels)
+    print ' '
+    print 'Decision Tree Classifier', pca_text
+    clf_fit_and_evaluate(clf_dt, features, labels, pca_on, True)
 
-# classifier 4: Logistic Regression
-from sklearn.linear_model import LogisticRegression
-clf_lr = LogisticRegression()
+    # classifier 3: Support Vector Machines
+    from sklearn import svm
+    clf_svm = svm.SVC(kernel="rbf")
 
-print ''
-print 'Logistic Regression'
-clf_fit_and_evaluate(clf_lr, features, labels)
+    print ' '
+    print 'Support Vector Machines', pca_text
+    clf_fit_and_evaluate(clf_svm, features, labels, pca_on, True)
 
-# classifier 5: k-nearest Neighbours
-from sklearn import cluster
-clf_knn = cluster.KMeans(n_clusters=2)
+    # classifier 4: Logistic Regression
+    from sklearn.linear_model import LogisticRegression
+    clf_lr = LogisticRegression()
 
-print ' '
-print 'k-nearest Neigbours'
-clf_fit_and_evaluate(clf_knn, features, labels)
+    print ''
+    print 'Logistic Regression', pca_text
+    clf_fit_and_evaluate(clf_lr, features, labels, pca_on, True)
+
+    # classifier 5: k-nearest Neighbours
+    from sklearn import cluster
+    clf_knn = cluster.KMeans(n_clusters=2)
+
+    print ' '
+    print 'k-nearest Neigbours', pca_text
+    clf_fit_and_evaluate(clf_knn, features, labels, pca_on, True)
 
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
