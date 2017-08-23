@@ -45,6 +45,7 @@ def clf_fit_and_evaluate(clf, features, labels, pca_on, print_it):
     prec_poi, prec_non_poi, rec_poi, rec_non_poi, f1_poi, f1_non_poi = 0, 0, 0, 0, 0, 0
     
     iters = 5000
+    divider = iters
     
     for iter in range (iters):
 
@@ -75,15 +76,15 @@ def clf_fit_and_evaluate(clf, features, labels, pca_on, print_it):
             f1_poi += f1[1]
             f1_non_poi += f1[0]
         except:
-            iter-=1
+            divider-=1
 
 
-    prec_poi/=iter
-    prec_non_poi/=iter
-    rec_poi/=iter
-    rec_non_poi/=iter
-    f1_poi/=iter
-    f1_non_poi/=iter
+    prec_poi/=divider
+    prec_non_poi/=divider
+    rec_poi/=divider
+    rec_non_poi/=divider
+    f1_poi/=divider
+    f1_non_poi/=divider
     if print_it:
         print 'precision poi      : ', round(prec_poi, 2)
         print 'precision non-poi  : ', round(prec_non_poi, 2)
@@ -254,6 +255,9 @@ for i in range (2):
     print 'k-nearest Neigbours', pca_text
     clf_fit_and_evaluate(clf_knn, features, labels, pca_on, True)
 
+# Choose Gaussian Naive Bayes, with PCA as classifier to tune
+clf = GaussianNB()
+
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -272,8 +276,5 @@ features_train, features_test, labels_train, labels_test = \
 ### that the version of poi_id.py that you submit can be run on its own and
 ### generates the necessary .pkl files for validating your results.
 
-# Gaussian Naive Bayes, replace later with final clf, this is to prevent error message
-from sklearn.naive_bayes import GaussianNB
-clf = GaussianNB()
 
 dump_classifier_and_data(clf, my_dataset, features_list)
