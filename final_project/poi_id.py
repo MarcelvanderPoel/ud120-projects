@@ -283,5 +283,8 @@ clf_fit_and_evaluate(clf, features, labels, False, True, 200)
 ### that the version of poi_id.py that you submit can be run on its own and
 ### generates the necessary .pkl files for validating your results.
 
+# Winner: Gaussian Naive Bayes with PCA
+clf = GaussianNB()
+clf_fit_and_evaluate(clf, features, labels, True, False, 5000)
 
 dump_classifier_and_data(clf, my_dataset, features_list)

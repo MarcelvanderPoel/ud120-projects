@@ -176,7 +176,9 @@ features, from which from_poi_perc had the hightest score.
 
 I looked at the following classification algorithms, with and without PCA. Principal component analysis is used on all these algorithms to reduce the dimensionality of the input features.
 With 5 principal components I get 92% of the variation in the data.
-
+<TABLE BORDER=0>
+<TR>
+<TD>
 <table>
   <tr>
     <th>Gaussian Naive Bayes  with PCA</th>
@@ -335,7 +337,8 @@ With 5 principal components I get 92% of the variation in the data.
     <td>0.72</td>
   </tr>
 </table>
-
+</TD>
+<TD>
 <table>
   <tr>
     <th>Gaussian Naive Bayes  without PCA</th>
@@ -494,7 +497,9 @@ With 5 principal components I get 92% of the variation in the data.
     <td>0.7</td>
   </tr>
 </table>
-
+</TD>
+</TR>
+</TABLE>
 In choosing the best algorithm, I found it important that the recall on POI is high, making sure
 that POI are not easily missed. After that I found a precision on non-poi more important,
 than the precision on poi; I rather select to many POI than missing one.
@@ -513,24 +518,96 @@ The best estimator was KMeans(algorithm='full', copy_x=True, init='random', max_
     n_clusters=9, n_init=2, n_jobs=1, precompute_distances='auto', random_state=None, tol=0.0001, verbose=0).
      
 I noticed GridSearchCV uses a different scoring and doesn't follow my high recall on poi/high precision on non-poi
-scoring. I lowered the n_clusters step by step to find an optimum and found that at 
-    
+scoring. I lowered the n_clusters step by step to find an optimum and found that at n_clusters = 2. 
+Then, the best estimator was KMeans(algorithm='elkan', copy_x=True, init='random', max_iter=300,
+    n_clusters=2, n_init=1, n_jobs=1, precompute_distances='auto', random_state=None, tol=0.0001, verbose=0).    
 
-  
-                
+<TABLE BORDER=0>
+<TR>
+<TD>
+<table>
+  <tr>
+    <th>Gaussian Naive Bayes  with PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.41</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.9</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.33</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.92</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.34</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.91</td>
+  </tr>
+</table>
+</TD>
+<TD> 
+<table>
+  <tr>
+    <th>Tuned KMeans without PCA</th>
+    <th></th>
+  </tr>
+  <tr>
+    <td>precision poi</td>
+    <td>0.26</td>
+  </tr>
+  <tr>
+    <td>precision non-poi</td>
+    <td>0.74</td>
+  </tr>
+  <tr>
+    <td>recall poi</td>
+    <td>0.47</td>
+  </tr>
+  <tr>
+    <td>recall non-poi</td>
+    <td>0.55</td>
+  </tr>
+  <tr>
+    <td>f1 poi</td>
+    <td>0.24</td>
+  </tr>
+  <tr>
+    <td>f1 non-poi</td>
+    <td>0.58</td>
+  </tr>
+</table>  
+</TD>
+</TR>
+</TABLE>                
+
 ## Validation
 
-sklearn cross validation to split tst/train. Use k-fold cross validation.
+I validated my results on metrics by splitting the data in 2/3 of training data and 1/3 of test data. To get better
+metrics, I repeatedly fitted my classifiers and averaged the metrics over all the fits. The validation gave me the
+metrics to measure the performance of the classifiers I investigated. It also made me aware of overfitting. 
 
 ## Evaluation Metrics
 
-
-
-
-With and without Principal component analysis for all classifiers. part about training/testing.
-Lesson 14/4
+As described above, I prefer a higher score on recall POI and after that on precision non-POI.
+Based on this I would choose the KMeans without PCA. But the project criteria state that precision and recall
+should at least be 0.3, therefore the Gaussian Naive Bayes with PCA is the winner here. 
 
 References:
-Sklearn Documentation on http://scikit-learn.org
-Udacity Course documentation
-Stackoverflow website
+1) Sklearn Documentation on http://scikit-learn.org
+2) Udacity Course documentation
+3) Stackoverflow website
+4) Python documentation at https://docs.python.org
+
+I have cited above the origins of an parts of the submission that were taken from websites,
+forums, blog posts, github repositories, etc.
