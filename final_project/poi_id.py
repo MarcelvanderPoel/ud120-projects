@@ -39,27 +39,51 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
     return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
 def clf_fit_and_evaluate(clf, features, labels, print_it=True):
-    ### split the data in 30% test data and 70% training data
-    training_features, testing_features, training_labels, testing_labels = \
-        cross_validation.train_test_split(features, labels, test_size=0.3, random_state=42)
 
-    ### fit classifier, predict and determine accuracy, precision and recall
-    clf.fit(training_features, training_labels)
-    pred = clf.predict(testing_features)
-    accuracy = accuracy_score(testing_labels, pred)
-    precision = precision_score(testing_labels, pred)
-    recall = recall_score(testing_labels, pred)
-    f1 = f1_score(testing_labels, pred)
+    ### run the evaluation 200 times and take the average scores, because every unique evaluation gives an unique score
 
+    prec_poi, prec_non_poi, rec_poi, rec_non_poi, f1_poi, f1_non_poi = 0, 0, 0, 0, 0, 0
+    
+    iters = 5000
+    
+    for iter in range (iters):
+
+        ### split the data in 30% test data and 70% training data, no random state to get different results every split
+        training_features, testing_features, training_labels, testing_labels = \
+            cross_validation.train_test_split(features, labels, test_size=0.33)
+
+        ### fit classifier, predict and determine precision, recall and f1
+        clf.fit(training_features, training_labels)
+        pred = clf.predict(testing_features)
+        precision = precision_score(testing_labels, pred, average=None)
+        try:
+            prec_poi+=precision[1]
+            prec_non_poi+=precision[0]       
+            recall = recall_score(testing_labels, pred, average=None)
+            rec_poi += recall[1]
+            rec_non_poi += recall[0]
+            f1 = f1_score(testing_labels, pred, average=None)
+            f1_poi += f1[1]
+            f1_non_poi += f1[0]
+        except:
+            print 'Out of Bounds'
+            iter-=1
+
+
+    prec_poi/=iter
+    prec_non_poi/=iter
+    rec_poi/=iter
+    rec_non_poi/=iter
+    f1_poi/=iter
+    f1_non_poi/=iter
     if print_it:
-        print 'accuracy     : ', accuracy
-        print 'precision    : ', precision
-        print 'recall       : ', recall
-        print 'f1           : ', f1
+        print 'precision poi      : ', round(prec_poi, 2)
+        print 'precision non-poi  : ', round(prec_non_poi, 2)
+        print 'recall poi         : ', round(rec_poi, 2)
+        print 'recall non-poi     : ', round(rec_non_poi, 2)
+        print 'f1 poi             : ', round(f1_poi, 2)
+        print 'f1 non-poi         : ', round(f1_non_poi, 2)
 
-    print classification_report(testing_labels, pred)
-
-    return accuracy, precision, recall, f1
 
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
@@ -171,9 +195,9 @@ features = scaler.fit_transform(features)
 ### you'll need to use Pipelines. For more info:
 ### http://scikit-learn.org/stable/modules/pipeline.html
 
-# Create a number of classifiers
+# Create a 5 classifiers
 
-# Gaussian Naive Bayes
+# classifier 1: Gaussian Naive Bayes
 from sklearn.naive_bayes import GaussianNB
 clf_gnb = GaussianNB()
 
@@ -181,7 +205,7 @@ print ''
 print 'Gaussian Naive Bayes'
 clf_fit_and_evaluate(clf_gnb, features, labels)
 
-# Decision Tree Classifier
+# classifier 2: Decision Tree Classifier
 from sklearn import tree
 clf_dt = tree.DecisionTreeClassifier()
 
@@ -189,7 +213,29 @@ print ' '
 print 'Decision Tree Classifier'
 clf_fit_and_evaluate(clf_dt, features, labels)
 
-# print classification_report(testing_labels, pred, target_names=['0','1'])
+# classifier 3: Support Vector Machines
+from sklearn import svm
+clf_svm = svm.SVC(kernel="rbf")
+
+print ' '
+print 'Support Vector Machines'
+clf_fit_and_evaluate(clf_svm, features, labels)
+
+# classifier 4: Logistic Regression
+from sklearn.linear_model import LogisticRegression
+clf_lr = LogisticRegression()
+
+print ''
+print 'Logistic Regression'
+clf_fit_and_evaluate(clf_lr, features, labels)
+
+# classifier 5: k-nearest Neighbours
+from sklearn import cluster
+clf_knn = cluster.KMeans(n_clusters=2)
+
+print ' '
+print 'k-nearest Neigbours'
+clf_fit_and_evaluate(clf_knn, features, labels)
 
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 

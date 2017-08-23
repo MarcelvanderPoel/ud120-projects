@@ -178,13 +178,68 @@ I looked at the following classification algorithms:
 1) Gaussian Naive Bayes
 2) Decision Tree
 3) SVM
+4) Logistic Regression
+5) k-nearest neigbours
 
-What do I find more important when judging the algorithm, precision, recall or F1?
-Would I rather not overlook any poi, or would I rather prevent selecting/accusing the wrong poi and why? 
+Gaussian Naive Bayes
+precision poi      :  0.34
+precision non-poi  :  0.9
+recall poi         :  0.33
+recall non-poi     :  0.88
+f1 poi             :  0.3
+f1 non-poi         :  0.89
+ 
+Decision Tree Classifier
+precision poi      :  0.26
+precision non-poi  :  0.89
+recall poi         :  0.28
+recall non-poi     :  0.88
+f1 poi             :  0.25
+f1 non-poi         :  0.89
+ 
+Support Vector Machines
+precision poi      :  0.0
+precision non-poi  :  0.87
+recall poi         :  0.0
+recall non-poi     :  1.0
+f1 poi             :  0.0
+f1 non-poi         :  0.93
+
+Logistic Regression
+precision poi      :  0.29
+precision non-poi  :  0.88
+recall poi         :  0.08
+recall non-poi     :  0.99
+f1 poi             :  0.12
+f1 non-poi         :  0.93
+ 
+k-nearest Neigbours
+precision poi      :  0.3
+precision non-poi  :  0.77
+recall poi         :  0.36
+recall non-poi     :  0.69
+f1 poi             :  0.21
+f1 non-poi         :  0.68
+
+ Moet ik nog iets doen met Principal Component Analysis?
 
 ## Tuning an algorithm
 
+Use GridSearchCV, look at clf.best_estimator_ and clf.best_params_
+
 ## Validation
+
+sklearn cross validation to split tst/train. Use k-fold cross validation.
 
 ## Evaluation Metrics
 
+What do I find more important when judging the algorithm, precision, recall or F1 (=harmonic mean of precision and recall)
+Would I rather not overlook any poi, or would I rather prevent selecting/accusing the wrong poi and why?
+high recall is prefered ove a high precision, because I would prefer not to miss a poi and accept that maybe too many people are flagged as poi.
+these will be filtered out after further investigation.
+
+Show recall, precision, F1, accuracy?
+
+
+With and without Principal component analysis for all classifiers. part about training/testing.
+Lesson 14/4
