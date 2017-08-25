@@ -486,19 +486,19 @@ Compared to Gaussian Naive Bayes the tuned DecisionTreeClassifier did not give b
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.845</td>
+    <td>0.84114</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.33831</td>
+    <td>0.37665</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.17</td>
+    <td>0.171</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.22629</td>
+    <td>0.23521</td>
   </tr>
 </table>  
 </TD>
