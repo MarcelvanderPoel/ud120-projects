@@ -170,19 +170,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.84607</td>
+    <td>0.84757</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td bgcolor="#FFFF00"> 0.41571</td>
+    <td>0.45059</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td bgcolor="#FFFF00">0.381</td>
+    <td>0.3055</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.3976</td>
+    <td>0.36412</td>
   </tr>
   <tr>
     <td></td>
@@ -194,19 +194,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.79153</td>
+    <td>0.78664</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.23482</td>
+    <td>0.23652</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.2495</td>
+    <td>0.2215</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.24194</td>
+    <td>0.22876</td>
   </tr>
   <tr>
     <td></td>
@@ -218,19 +218,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.86327</td>
+    <td>0.851</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.05263</td>
+    <td>0.10185</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.0015</td>
+    <td>0.0055</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.00292</td>
+    <td>0.01044</td>
   </tr>
   <tr>
     <td></td>
@@ -242,19 +242,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.868</td>
+    <td>0.86264</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.54386</td>
+    <td>0.63322</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.062</td>
+    <td>0.0915</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.11131</td>
+    <td>0.1599</td>
   </tr>
   <tr>
     <td></td>
@@ -266,19 +266,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.6998</td>
+    <td>0.58079</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.18033</td>
+    <td>0.1621</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.353</td>
+    <td>0.464</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.23872</td>
+    <td>0.24026</td>
   </tr>
 </table>
 </TD>
@@ -290,19 +290,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.83567</td>
+    <td>0.85464</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td bgcolor="#FFFF00">0.3607</td>
+    <td>0.48876</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td bgcolor="#FFFF00">0.301</td>
+    <td>0.3805</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.32815</td>
+    <td>0.42789</td>
   </tr>
   <tr>
     <td></td>
@@ -314,19 +314,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.81233</td>
+    <td>0.79614</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.29325</td>
+    <td>0.27967</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.289</td>
+    <td>0.271</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.29111</td>
+    <td>0.27527</td>
   </tr>
   <tr>
     <td></td>
@@ -338,19 +338,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.86353</td>
+    <td>0.851</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.07273</td>
+    <td>0.10185</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.002</td>
+    <td>0.0055</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.00389</td>
+    <td>0.01044</td>
   </tr>
   <tr>
     <td></td>
@@ -362,19 +362,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.87453</td>
+    <td>0.86571</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.68098</td>
+    <td>0.67857</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.111</td>
+    <td>0.114</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.19089</td>
+    <td>0.19521</td>
   </tr>
   <tr>
     <td></td>
@@ -386,19 +386,19 @@ I looked at the following classification algorithms, with and without PCA. Princ
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.6748</td>
+    <td>0.5955</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td>0.17266</td>
+    <td>0.1614</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td>0.3795</td>
+    <td>0.4365</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.23734</td>
+    <td>0.23566</td>
   </tr>
 </table>  
 </TD>
@@ -438,23 +438,19 @@ Compared to Gaussian Naive Bayes the tuned DecisionTreeClassifier did not give b
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.84607</td>
+    <td>0.84757</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td bgcolor="#FFFF00"> 0.41571</td>
+    <td>0.45059</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td bgcolor="#FFFF00">0.381</td>
+    <td>0.3055</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.3976</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
+    <td>0.36412</td>
   </tr>
 </table>
 </TD>
@@ -466,55 +462,43 @@ Compared to Gaussian Naive Bayes the tuned DecisionTreeClassifier did not give b
   </tr>
   <tr>
     <td>accuracy</td>
-    <td>0.83567</td>
+    <td>0.85464</td>
   </tr>
   <tr>
     <td>precision</td>
-    <td bgcolor="#FFFF00">0.3607</td>
+    <td>0.48876</td>
   </tr>
   <tr>
     <td>recall</td>
-    <td bgcolor="#FFFF00">0.301</td>
+    <td>0.3805</td>
   </tr>
   <tr>
     <td>f1</td>
-    <td>0.32815</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
+    <td>0.42789</td>
   </tr>
 </table>  
 </TD>
 <TD> 
 <table>
   <tr>
-    <th>Tuned KMeans without PCA</th>
+    <th>Tuned decision tree without pca</th>
     <th></th>
   </tr>
   <tr>
-    <td>precision poi</td>
-    <td>0.26</td>
+    <td>accuracy</td>
+    <td>0.845</td>
   </tr>
   <tr>
-    <td>precision non-poi</td>
-    <td>0.74</td>
+    <td>precision</td>
+    <td>0.33831</td>
   </tr>
   <tr>
-    <td>recall poi</td>
-    <td>0.47</td>
+    <td>recall</td>
+    <td>0.17</td>
   </tr>
   <tr>
-    <td>recall non-poi</td>
-    <td>0.55</td>
-  </tr>
-  <tr>
-    <td>f1 poi</td>
-    <td>0.24</td>
-  </tr>
-  <tr>
-    <td>f1 non-poi</td>
-    <td>0.58</td>
+    <td>f1</td>
+    <td>0.22629</td>
   </tr>
 </table>  
 </TD>
@@ -540,12 +524,8 @@ Precision and recall were used as evaluation metrics. Recall is a metric that de
 in the population of true positives and false negatives combined (e.g. the percentage of POI identified correctly from 
 all POI). Precision is a metric that describes the number of true positives in the population of true positives and 
 false positives combined (e.g. the percentage of 'real' POI from all people identified as POI).
-
-@@@@@@ 
-As described above, I prefer a higher score on recall POI and after that on precision non-POI.
-Based on this I would choose the KMeans without PCA. But the project criteria state that precision and recall
-should at least be 0.3, therefore the Gaussian Naive Bayes with PCA is the winner here. 
-@@@@@@
+The f1-score is the harmonic mean of precision and recall. Gaussian Naive Bayes without PCA scores best on all metrics 
+and is therefore the best algorithm for this project.
 
 References:
 1) Sklearn Documentation on http://scikit-learn.org

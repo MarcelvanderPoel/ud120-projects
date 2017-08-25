@@ -40,7 +40,9 @@ def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_pe
 
     return from_poi_perc, to_poi_perc, from_to_add, from_to_mlt
 
+
 def test_classifier(clf, dataset, feature_list, pca_on, folds=1000):
+
     data = featureFormat(dataset, feature_list, sort_keys=True)
     labels, features = targetFeatureSplit(data)
     scaler = MinMaxScaler()
@@ -102,7 +104,6 @@ def test_classifier(clf, dataset, feature_list, pca_on, folds=1000):
     except:
         print "Got a divide by zero when trying out:", clf
         print "Precision or recall may be undefined due to a lack of true positive predicitons."
-
 
 
 ### Task 1: Select what features you'll use.
@@ -186,9 +187,8 @@ for num_of_features in range(1, 23):
     test_classifier(pipeline, data_dict, predictors, False)
 
 
-
-# Select 10 best features
-selector = SelectKBest(score_func=f_classif, k=10)
+# Select 5 best features
+selector = SelectKBest(score_func=f_classif, k=5)
 selector.fit(features, poi)
 is_best_features = selector.get_support()
 
@@ -253,9 +253,7 @@ for i in range (2):
 
     print ''
     print 'Gaussian Naive Bayes', pca_text
-#    clf_fit_and_evaluate(clf_gnb, features, labels, pca_on, True, 5000)
     test_classifier(clf_gnb, my_dataset, features_list, pca_on, folds=1000)
-
 
     # classifier 2: Decision Tree Classifier
     from sklearn import tree
@@ -263,7 +261,6 @@ for i in range (2):
 
     print ' '
     print 'Decision Tree Classifier', pca_text
-#    clf_fit_and_evaluate(clf_dt, features, labels, pca_on, True, 5000)
     test_classifier(clf_dt, my_dataset, features_list, pca_on, folds=1000)
 
     # classifier 3: Support Vector Machines
@@ -272,7 +269,6 @@ for i in range (2):
 
     print ' '
     print 'Support Vector Machines', pca_text
-#    clf_fit_and_evaluate(clf_svm, features, labels, pca_on, True, 5000)
     test_classifier(clf_svm, my_dataset, features_list, pca_on, folds=1000)
 
     # classifier 4: Logistic Regression
@@ -281,7 +277,6 @@ for i in range (2):
 
     print ''
     print 'Logistic Regression', pca_text
-#    clf_fit_and_evaluate(clf_lr, features, labels, pca_on, True, 5000)
     test_classifier(clf_lr, my_dataset, features_list, pca_on, folds=1000)
 
     # classifier 5: KMeans
@@ -290,7 +285,6 @@ for i in range (2):
 
     print ' '
     print 'KMeans', pca_text
-#    clf_fit_and_evaluate(clf_km, features, labels, pca_on, True, 5000)
     test_classifier(clf_km, my_dataset, features_list, pca_on, folds=1000)
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall
@@ -305,7 +299,7 @@ for i in range (2):
 from sklearn.grid_search import GridSearchCV
 parameters = {'criterion': ('gini', 'entropy') , 'splitter':('best', 'random')
                 , 'min_samples_split': [2,3,4,5,6,7,8,9,10,11,12,13,14,15], 'min_samples_leaf': [1,2,3]
-                , 'max_features': [4,5,6,7,8,9,10]}
+                , 'max_features': [2,3,4,5]}
 
 dt = tree.DecisionTreeClassifier()
 clf = GridSearchCV(dt, parameters)
@@ -324,7 +318,8 @@ test_classifier(clf, my_dataset, features_list, False, folds=1000)
 ### generates the necessary .pkl files for validating your results.
 
 # Winner: Gaussian Naive Bayes with PCA
-# clf = GaussianNB()
-#clf_fit_and_evaluate(clf, features, labels, True, False, 5000)
+clf = GaussianNB()
+pca_on=False
+test_classifier(clf_gnb, my_dataset, features_list, pca_on, folds=1000)
 
 dump_classifier_and_data(clf, my_dataset, features_list)
