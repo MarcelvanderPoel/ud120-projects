@@ -7,20 +7,15 @@ import numpy as np
 import operator
 sys.path.append("../tools/")
 
-from tester import dump_classifier_and_data
-from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.preprocessing import MinMaxScaler
-from feature_format import featureFormat, targetFeatureSplit
-from sklearn import cross_validation
-from sklearn.cross_validation import StratifiedShuffleSplit
-from sklearn.decomposition import PCA
-from sklearn.metrics import precision_score, recall_score, f1_score, classification_report
-
-PERF_FORMAT_STRING = "\
-\tAccuracy: {:>0.{display_precision}f}\tPrecision: {:>0.{display_precision}f}\t\
-Recall: {:>0.{display_precision}f}\tF1: {:>0.{display_precision}f}\tF2: {:>0.{display_precision}f}"
-RESULTS_FORMAT_STRING = "\tTotal predictions: {:4d}\tTrue positives: {:4d}\tFalse positives: {:4d}\
-\tFalse negatives: {:4d}\tTrue negatives: {:4d}"
+from tester                     import dump_classifier_and_data
+from sklearn.feature_selection  import SelectKBest, f_classif
+from sklearn.preprocessing      import MinMaxScaler
+from feature_format             import featureFormat, targetFeatureSplit
+from sklearn                    import cross_validation
+from sklearn.cross_validation   import StratifiedShuffleSplit
+from sklearn.decomposition      import PCA
+from sklearn.metrics            import precision_score, recall_score, f1_score, classification_report
+from sklearn.pipeline           import Pipeline
 
 
 def compute_poi_communication_index(from_this_person_to_poi, from_poi_to_this_person, from_messages, to_messages):
@@ -166,10 +161,31 @@ for key in keys:
 add_features = np.array(added_features)
 
 features = np.concatenate((features,add_features),axis=1)
-
+print 'Features', data_dict
 # Rescale features
 scaler = MinMaxScaler()
 rescaled_features = scaler.fit_transform(features)
+
+from sklearn.naive_bayes import GaussianNB
+clf = GaussianNB()
+
+print ''
+print 'Determine best k for SelectKbest'
+print ''
+
+predictors = features_list + ['from_poi_perc', 'to_poi_perc', 'from_to_add', 'from_to_mult']
+
+for num_of_features in range(1, 23):
+
+    print 'Number of features: ', num_of_features
+
+    pipeline = Pipeline(steps=[("sel", SelectKBest(k=num_of_features)),
+                               ("clf", clf)])
+
+    ### Get classifier score
+    test_classifier(pipeline, data_dict, predictors, False)
+
+
 
 # Select 10 best features
 selector = SelectKBest(score_func=f_classif, k=10)

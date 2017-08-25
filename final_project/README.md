@@ -118,11 +118,14 @@ with very high values (outliers) from which i assume it is the total of all data
 persons, I removed them from the dataset. 
 2) LOCKHART EUGENE E is the only person with NaN values for all features. I removed him from the dataset.
 
-I used SelectKBest to determine the most powerful features for classifying after rescaling them with the MinMax rescaler.
 I made the assumption that POI share fraud related information more between themselves then with non-POI and that this
 could show through the relative portion of mail they send and receive from other POI. For this I created four additional
-features, from which from_poi_perc had the highest score. 
+features, the percentage of mail received from POI, send to POI and these two percentages added and multiplied.
 
+I used SelectKBest to select the 10 most powerful features for classifying after rescaling them with the MinMax rescaler.
+Based on these 10 I fitted and compared all the machine learning algorithms and choose the best performing Gaussian
+Naive Bayes. With GNB I then compared all possible values for k for SelectKBest and found out that the 5 strongest 
+features gave the best results. None of the new features were in this top 5:
 
 <table class="tg">
   <tr>
@@ -149,38 +152,19 @@ features, from which from_poi_perc had the highest score.
     <td>deferred_income</td>
     <td>11.46</td>
   </tr>
-  <tr>
-    <td>long_term_incentive</td>
-    <td>9.92</td>
-  </tr>
-  <tr>
-    <td>restricted_stock</td>
-    <td>9.21</td>
-  </tr>
-  <tr>
-    <td>total_payments</td>
-    <td>8.77</td>
-  </tr>
-  <tr>
-    <td>shared_receipt_with_poi</td>
-    <td>8.59</td>
-  </tr>
- <tr>
-    <td>from_poi_perc</td>
-    <td>7.22</td>
-  </tr>
+
 </table>
 
 
 ## Picking an algorithm
 
 I looked at the following classification algorithms, with and without PCA. Principal component analysis is used on all these algorithms to reduce the dimensionality of the input features.
-With 5 principal components I get 92% of the variation in the data.
+
 <TABLE BORDER=0>
 <TR>
 <TD>
 <table>
-<tr>
+  <tr>
     <th>Gaussian Naive Bayes  with PCA</th>
     <th></th>
   </tr>
@@ -432,20 +416,17 @@ decision tree, would result in better scores.
 Parameter tuning in machine learning is the process of optimizing parameter settings for a learning algorithm.
 Tuning your algorithm allows you to get the best possible results. 
 
-@@@@@@@
 I used GridSearchCV with the following parameters to tune DecisionTreeClassifier: 
-{'n_clusters': [1,2,3,4,5,6,7,8,9] , 'algorithm':('auto', 'full', 'elkan')
-                , 'init':('k-means++', 'random'), 'n_init': [1,2,5,10,20]}.
+{'criterion': ('gini', 'entropy') , 'splitter':('best', 'random'), 'min_samples_split': [2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    'min_samples_leaf': [1,2,3], 'max_features': [4,5,6,7,8,9,10]}.
                 
-The best estimator was KMeans(algorithm='full', copy_x=True, init='random', max_iter=300,
-    n_clusters=9, n_init=2, n_jobs=1, precompute_distances='auto', random_state=None, tol=0.0001, verbose=0).
+The best estimator was DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
+            max_features=5, max_leaf_nodes=None, min_impurity_split=1e-07,
+            min_samples_leaf=3, min_samples_split=6,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=None,
+            splitter='random')
      
-I noticed GridSearchCV uses a different scoring and doesn't follow my high recall on poi/high precision on non-poi
-scoring. I lowered the n_clusters step by step to find an optimum and found that at n_clusters = 2. 
-Then, the best estimator was KMeans(algorithm='elkan', copy_x=True, init='random', max_iter=300,
-    n_clusters=2, n_init=1, n_jobs=1, precompute_distances='auto', random_state=None, tol=0.0001, verbose=0).    
-@@@@@@
-
+Compared to Gaussian Naive Bayes the tuned DecisionTreeClassifier did not give better results for recall and precision.    
 
 <TABLE BORDER=0>
 <TR>
@@ -456,30 +437,54 @@ Then, the best estimator was KMeans(algorithm='elkan', copy_x=True, init='random
     <th></th>
   </tr>
   <tr>
-    <td>precision poi</td>
-    <td>0.41</td>
+    <td>accuracy</td>
+    <td>0.84607</td>
   </tr>
   <tr>
-    <td>precision non-poi</td>
-    <td>0.9</td>
+    <td>precision</td>
+    <td bgcolor="#FFFF00"> 0.41571</td>
   </tr>
   <tr>
-    <td>recall poi</td>
-    <td>0.33</td>
+    <td>recall</td>
+    <td bgcolor="#FFFF00">0.381</td>
   </tr>
   <tr>
-    <td>recall non-poi</td>
-    <td>0.92</td>
+    <td>f1</td>
+    <td>0.3976</td>
   </tr>
   <tr>
-    <td>f1 poi</td>
-    <td>0.34</td>
-  </tr>
-  <tr>
-    <td>f1 non-poi</td>
-    <td>0.91</td>
+    <td></td>
+    <td></td>
   </tr>
 </table>
+</TD>
+<TD> 
+<table>
+  <tr>
+    <th>Gaussian Naive Bayes  without PCA</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>accuracy</td>
+    <td>0.83567</td>
+  </tr>
+  <tr>
+    <td>precision</td>
+    <td bgcolor="#FFFF00">0.3607</td>
+  </tr>
+  <tr>
+    <td>recall</td>
+    <td bgcolor="#FFFF00">0.301</td>
+  </tr>
+  <tr>
+    <td>f1</td>
+    <td>0.32815</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</table>  
 </TD>
 <TD> 
 <table>
@@ -550,6 +555,8 @@ References:
 5) https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-9863-7_233
 6) https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)
 7) https://machinelearningmastery.com/how-to-improve-machine-learning-results/
+8) https://books.google.nl/books?id=EwNwDQAAQBAJ&pg=PA108&lpg=PA108&dq=sklearn+pipeline+for+dummies+selectkbest&source=bl&ots=xz5q1AGmB-&sig=LpD1YHJq8CTxet58V4bV7uc6Wqs&hl=nl&sa=X&ved=0ahUKEwikmJqxovPVAhUIKlAKHRnQCg4Q6AEIajAI#v=onepage&q=sklearn%20pipeline%20for%20dummies%20selectkbest&f=false
+
 
 
 I have cited above the origins of an parts of the submission that were taken from websites,
